@@ -1,9 +1,10 @@
 package pe.edu.upeu.autoandes.dto;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
-public record OrdenRequestDTO(@NotNull @Positive Long vehiculoId, @NotNull @Min(0) @Max(9999999) Integer kilometraje,
-@NotNull @Size(min=1,max=10) List<@NotNull @Valid DetalleRequestDTO> detalles) {}
 
+public record OrdenRequestDTO(
+    @NotNull @Positive Long vehiculoId,
+    @NotNull @Min(0) @Max(9999999) Integer kilometraje,
+    @NotNull @Size(min = 1, max = 10) List<@NotNull @Valid DetalleRequestDTO> detalles) {}

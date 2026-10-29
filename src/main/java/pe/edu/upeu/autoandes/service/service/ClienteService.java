@@ -1,2 +1,8 @@
-package pe.edu.upeu.autoandes.service.service;import pe.edu.upeu.autoandes.dto.ClienteResponseDTO;import java.util.List;
-public interface ClienteService { List<ClienteResponseDTO> readAll(); }
+package pe.edu.upeu.autoandes.service.service;
+
+import java.util.List;
+import pe.edu.upeu.autoandes.dto.ClienteResponseDTO;
+
+public interface ClienteService {
+  List<ClienteResponseDTO> readAll();
+}
