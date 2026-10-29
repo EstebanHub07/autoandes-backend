@@ -1,8 +1,18 @@
 package pe.edu.upeu.autoandes.dto;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-public record AnularRequestDTO(@NotBlank @Size(min=10,max=200) String motivo) {}
 
+import jakarta.validation.constraints.*;
+import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class AnularRequestDTO {
+  @NotBlank
+  @Size(min = 10, max = 200)
+  private String motivo;
+}

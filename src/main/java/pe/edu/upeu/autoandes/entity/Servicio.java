@@ -1,30 +1,33 @@
 package pe.edu.upeu.autoandes.entity;
+
 import jakarta.persistence.*;
-@Entity @Table(name="servicio")
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "servicio")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Servicio {
-@Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
-@Column(nullable=false,unique=true,length=7) private String codigo;
-@Column(nullable=false,length=80) private String nombre;
-@Column(nullable=false,precision=10,scale=2) private java.math.BigDecimal precio;
-@Column(name="duracion_min",nullable=false) private Integer duracionMin;
-@Column(nullable=false) @Convert(converter=org.hibernate.type.NumericBooleanConverter.class) private Boolean activo=true;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-public Long getId(){return id;}
-public void setId(Long value){this.id=value;}
+  @Column(nullable = false, unique = true, length = 7)
+  private String codigo;
 
-public String getCodigo(){return codigo;}
-public void setCodigo(String value){this.codigo=value;}
+  @Column(nullable = false, length = 80)
+  private String nombre;
 
-public String getNombre(){return nombre;}
-public void setNombre(String value){this.nombre=value;}
+  @Column(nullable = false, precision = 10, scale = 2)
+  private java.math.BigDecimal precio;
 
-public java.math.BigDecimal getPrecio(){return precio;}
-public void setPrecio(java.math.BigDecimal value){this.precio=value;}
+  @Column(name = "duracion_min", nullable = false)
+  private Integer duracionMin;
 
-public Integer getDuracionMin(){return duracionMin;}
-public void setDuracionMin(Integer value){this.duracionMin=value;}
-
-public Boolean getActivo(){return activo;}
-public void setActivo(Boolean value){this.activo=value;}
+  @Column(nullable = false)
+  @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+  private Boolean activo = true;
 }
-

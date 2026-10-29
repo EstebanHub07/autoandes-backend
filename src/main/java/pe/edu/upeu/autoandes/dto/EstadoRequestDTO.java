@@ -1,8 +1,16 @@
 package pe.edu.upeu.autoandes.dto;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-public record EstadoRequestDTO(@NotNull Boolean activo) {}
 
+import jakarta.validation.constraints.*;
+import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class EstadoRequestDTO {
+  @NotNull private Boolean activo;
+}

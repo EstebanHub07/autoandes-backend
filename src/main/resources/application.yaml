@@ -1,20 +1,20 @@
+server:
+  port: 8080
 spring:
   application:
     name: autoandes
   datasource:
-    url: ${DB_URL:jdbc:oracle:thin:@//localhost:1521/FREEPDB1}
-    username: ${DB_USER:autoandes}
-    password: ${DB_PASSWORD:CAMBIAR_PASSWORD}
+    url: jdbc:oracle:thin:@//localhost:1522/FREEPDB1
+    username: autoandes
+    password: 123456
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: validate
   flyway:
     enabled: true
-server:
-  port: 8080
 app:
-  jwt-secret: ${JWT_SECRET}
+  jwt-secret: 7f8a3c2e1b0d9f4e8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f
   zone: America/Lima
   seed-password: ${SEED_PASSWORD:Auto2026*}
 springdoc:

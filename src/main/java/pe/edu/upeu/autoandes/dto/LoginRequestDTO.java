@@ -1,8 +1,18 @@
 package pe.edu.upeu.autoandes.dto;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.*;
-public record LoginRequestDTO(@NotBlank String username, @NotBlank String password) {}
 
+import jakarta.validation.constraints.*;
+import java.util.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginRequestDTO {
+  @NotBlank private String username;
+
+  @NotBlank private String password;
+}
