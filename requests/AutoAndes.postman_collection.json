@@ -1,0 +1,1277 @@
+{
+  "info": {
+    "name": "AutoAndes - Backend P1 P2 P3",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ejecutar sobre un esquema de práctica inicializado por Flyway. Las solicitudes modifican datos de prueba. Cada petición protegida inicia sesión con su rol."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1"
+    },
+    {
+      "key": "password",
+      "value": "Auto2026*"
+    }
+  ],
+  "item": [
+    {
+      "name": "P1 - CRUD y errores",
+      "item": [
+        {
+          "name": "Clientes reales",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/clientes"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Servicios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400: validación de servicio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"MAL\",\n  \"nombre\": \"x\",\n  \"precio\": 0,\n  \"duracionMin\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "404: servicio inexistente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios/999999"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 404\",()=>pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409: código repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"SRV-001\",\n  \"nombre\": \"Cambio de aceite\",\n  \"precio\": 90,\n  \"duracionMin\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Vehículos por cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/vehiculos?clienteId=1"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409: placa repetida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/vehiculos",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"AAA-111\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla\",\n  \"anio\": 2020,\n  \"clienteId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "201: nuevo servicio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"SRV-090\",\n  \"nombre\": \"Prueba Postman\",\n  \"precio\": 30,\n  \"duracionMin\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"servicioNuevoId\",pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: editar servicio nuevo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios/{{servicioNuevoId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"SRV-090\",\n  \"nombre\": \"Prueba editada\",\n  \"precio\": 40,\n  \"duracionMin\": 45\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: dar de baja",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios/{{servicioNuevoId}}/estado",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activo\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "204: eliminar servicio sin uso",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios/{{servicioNuevoId}}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 204\",()=>pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "P2 - Orden, rollback y reporte",
+      "item": [
+        {
+          "name": "201: registrar orden",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": 1,\n  \"kilometraje\": 50000,\n  \"detalles\": [\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 2\n    },\n    {\n      \"servicioId\": 2,\n      \"cantidad\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"ordenId\",pm.response.json().id);",
+                  "pm.test(\"Total calculado 240\",()=>pm.expect(pm.response.json().total).to.equal(240));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: detalle de orden",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes/{{ordenId}}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409: tercer detalle inactivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": 1,\n  \"kilometraje\": 50001,\n  \"detalles\": [\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 1\n    },\n    {\n      \"servicioId\": 2,\n      \"cantidad\": 1\n    },\n    {\n      \"servicioId\": 8,\n      \"cantidad\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "400: servicio repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": 1,\n  \"kilometraje\": 50001,\n  \"detalles\": [\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 1\n    },\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 400\",()=>pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409: kilometraje menor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": 1,\n  \"kilometraje\": 1,\n  \"detalles\": [\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: filtros combinados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes?placa=AAA-111&estado=REGISTRADA&desde=2026-10-01&hasta=2026-12-31"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"admin\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: reporte antes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reportes/ingresos-por-servicio"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"jefe\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: anular orden creada hoy",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes/{{ordenId}}/anular",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"El cliente canceló el servicio\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"jefe\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "409: segunda anulación",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes/{{ordenId}}/anular",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"El cliente canceló el servicio\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"jefe\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: reporte después",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reportes/ingresos-por-servicio"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"jefe\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "P3 - Seguridad",
+      "item": [
+        {
+          "name": "200: login admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "200: usuario actual",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "401: sin token",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "401: token alterado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer token.alterado.falso"
+              }
+            ],
+            "url": "{{baseUrl}}/servicios"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "401: cuenta inactiva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"inactivo\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 401\",()=>pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "403: asesor no puede anular",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes/1/anular",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motivo\": \"Motivo con longitud válida\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "403: asesor no puede ver reporte",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/reportes/ingresos-por-servicio"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"asesor\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "403: jefe no registra órdenes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{requestToken}}"
+              }
+            ],
+            "url": "{{baseUrl}}/ordenes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehiculoId\": 1,\n  \"kilometraje\": 50001,\n  \"detalles\": [\n    {\n      \"servicioId\": 1,\n      \"cantidad\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.sendRequest({url: pm.collectionVariables.get(\"baseUrl\") + \"/auth/login\", method: \"POST\", header: {\"Content-Type\":\"application/json\"}, body:{mode:\"raw\",raw:JSON.stringify({username:\"jefe\",password:pm.collectionVariables.get(\"password\")})}}, (err,res)=>{",
+                  "  if(err || res.code !== 200) throw new Error(\"No se pudo iniciar sesión: \" + (err || res.code));",
+                  "  pm.variables.set(\"requestToken\",res.json().token);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"HTTP 403\",()=>pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
