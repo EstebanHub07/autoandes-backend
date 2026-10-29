@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: autoandes
+  datasource:
+    url: ${DB_URL:jdbc:oracle:thin:@//localhost:1521/FREEPDB1}
+    username: ${DB_USER:autoandes}
+    password: ${DB_PASSWORD:CAMBIAR_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+server:
+  port: 8080
+app:
+  jwt-secret: ${JWT_SECRET}
+  zone: America/Lima
+  seed-password: ${SEED_PASSWORD:Auto2026*}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
