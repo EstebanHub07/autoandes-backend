@@ -12,7 +12,7 @@ Implementación del dominio AutoAndes con Spring Boot 4.0.7, Java 21+, JPA, Orac
 - Filtro JWT, permisos centralizados por rol, API sin sesiones y BCrypt.
 - Maven Wrapper para ejecutar sin instalar Maven.
 
-El examen pide `entity` en lugar de `model`. Los DTO se expresan como records de Java (campos inmutables y constructor automático); las entidades tienen campos privados y getters/setters explícitos. No necesitas Lombok para compilar.
+El examen pide `entity` en lugar de `model`. Los DTO son clases Java con campos privados y las anotaciones Lombok `@Getter`, `@Setter`, `@NoArgsConstructor` y `@AllArgsConstructor`, igual que en PharmaBDU1. Maven configura el procesador de anotaciones; en el IDE habilita el procesamiento de anotaciones si no reconoce los métodos generados. Las entidades tienen getters/setters explícitos.
 La conversión está centralizada en `AutoAndesMapper`.
 
 ## 1. Configurar Oracle

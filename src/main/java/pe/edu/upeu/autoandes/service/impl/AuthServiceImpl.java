@@ -28,9 +28,9 @@ public class AuthServiceImpl implements AuthService {
   }
 
   public LoginResponseDTO login(LoginRequestDTO d) {
-    var usuario = usuarios.findByUsername(d.username().trim());
+    var usuario = usuarios.findByUsername(d.getUsername().trim());
     String hash = usuario.map(u -> u.getPassword()).orElse(dummyHash);
-    boolean coincide = encoder.matches(d.password(), hash == null ? dummyHash : hash);
+    boolean coincide = encoder.matches(d.getPassword(), hash == null ? dummyHash : hash);
     if (!coincide || usuario.isEmpty() || !Boolean.TRUE.equals(usuario.get().getActivo()))
       throw new ApiException(401, "Usuario o contraseña incorrectos");
     var u = usuario.get();

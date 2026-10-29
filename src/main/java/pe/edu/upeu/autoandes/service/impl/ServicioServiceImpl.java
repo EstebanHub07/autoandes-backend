@@ -47,12 +47,12 @@ public class ServicioServiceImpl implements ServicioService {
 
   private ServicioResponseDTO guardar(Long id, ServicioRequestDTO d) {
     Servicio s = id == null ? new Servicio() : entidad(id);
-    if (servicios.existsByCodigoAndIdNot(d.codigo(), id == null ? -1L : id))
+    if (servicios.existsByCodigoAndIdNot(d.getCodigo(), id == null ? -1L : id))
       throw new ApiException(409, "El código de servicio ya existe");
-    s.setCodigo(d.codigo());
-    s.setNombre(d.nombre());
-    s.setPrecio(d.precio());
-    s.setDuracionMin(d.duracionMin());
+    s.setCodigo(d.getCodigo());
+    s.setNombre(d.getNombre());
+    s.setPrecio(d.getPrecio());
+    s.setDuracionMin(d.getDuracionMin());
     s = servicios.saveAndFlush(s);
     log.info("Servicio guardado id={}", s.getId());
     return AutoAndesMapper.servicio(s);

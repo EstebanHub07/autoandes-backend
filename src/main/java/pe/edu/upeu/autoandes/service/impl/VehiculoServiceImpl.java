@@ -54,14 +54,14 @@ public class VehiculoServiceImpl implements VehiculoService {
 
   private VehiculoResponseDTO guardar(Long id, VehiculoRequestDTO d) {
     Vehiculo v = id == null ? new Vehiculo() : entidad(id);
-    if (vehiculos.existsByPlacaAndIdNot(d.placa(), id == null ? -1L : id))
+    if (vehiculos.existsByPlacaAndIdNot(d.getPlaca(), id == null ? -1L : id))
       throw new ApiException(409, "La placa ya existe");
     v.setCliente(
-        clientes.findById(d.clienteId()).orElseThrow(() -> ApiException.noExiste("Cliente")));
-    v.setPlaca(d.placa());
-    v.setMarca(d.marca());
-    v.setModelo(d.modelo());
-    v.setAnio(d.anio());
+        clientes.findById(d.getClienteId()).orElseThrow(() -> ApiException.noExiste("Cliente")));
+    v.setPlaca(d.getPlaca());
+    v.setMarca(d.getMarca());
+    v.setModelo(d.getModelo());
+    v.setAnio(d.getAnio());
     v = vehiculos.saveAndFlush(v);
     log.info("Vehículo guardado id={}", v.getId());
     return AutoAndesMapper.vehiculo(v);

@@ -45,6 +45,6 @@ public class ServicioController {
 
   @PatchMapping("/{id}/estado")
   public ServicioResponseDTO estado(@PathVariable Long id, @Valid @RequestBody EstadoRequestDTO d) {
-    return service.cambiarEstado(id, d.activo());
+    return service.cambiarEstado(id, d.getActivo());
   }
 }

@@ -13,7 +13,7 @@
 | CrudService | CrudService | Contrato común create/update/read/delete/readAll |
 
 Las entidades están en entity porque lo pide el examen. Los repositorios siguen siendo interfaces JpaRepository.
-Los DTO son records: `request.vehiculoId()` equivale conceptualmente al getter de un DTO con Lombok.
+Los DTO son clases Java con Lombok, como en PharmaBDU1: se accede con `request.getVehiculoId()`. `@Getter` y `@Setter` generan los accesores; `@NoArgsConstructor` y `@AllArgsConstructor` generan los constructores. Request recibe los datos de entrada y Response define los datos de salida.
 Una entidad tiene setters porque cambia dentro de una transacción. Un DTO transporta una foto de los datos.
 
 ## Recorrido de registrar una orden

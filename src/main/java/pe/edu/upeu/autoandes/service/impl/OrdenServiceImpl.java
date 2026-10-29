@@ -32,32 +32,32 @@ public class OrdenServiceImpl implements OrdenService {
 
   @Transactional
   public OrdenResponseDTO registrar(OrdenRequestDTO d, String username) {
-    if (d.detalles() == null || d.detalles().isEmpty() || d.detalles().size() > 10)
+    if (d.getDetalles() == null || d.getDetalles().isEmpty() || d.getDetalles().size() > 10)
       throw new ApiException(400, "La orden requiere entre 1 y 10 detalles");
     Set<Long> ids = new HashSet<>();
-    for (DetalleRequestDTO item : d.detalles()) {
+    for (DetalleRequestDTO item : d.getDetalles()) {
       if (item == null
-          || item.servicioId() == null
-          || item.cantidad() == null
-          || item.cantidad() < 1
-          || item.cantidad() > 5) throw new ApiException(400, "Cantidad permitida: 1 a 5");
-      if (!ids.add(item.servicioId()))
+          || item.getServicioId() == null
+          || item.getCantidad() == null
+          || item.getCantidad() < 1
+          || item.getCantidad() > 5) throw new ApiException(400, "Cantidad permitida: 1 a 5");
+      if (!ids.add(item.getServicioId()))
         throw new ApiException(400, "No se permite repetir un servicio");
     }
     // Serializa los registros del mismo vehículo para validar contra la última orden confirmada.
     Vehiculo v =
-        vehiculos.bloquear(d.vehiculoId()).orElseThrow(() -> ApiException.noExiste("Vehículo"));
+        vehiculos.bloquear(d.getVehiculoId()).orElseThrow(() -> ApiException.noExiste("Vehículo"));
     ordenes
         .findFirstByVehiculoIdAndEstadoOrderByFechaDescIdDesc(v.getId(), EstadoOrden.REGISTRADA)
         .ifPresent(
             ultima -> {
-              if (d.kilometraje() < ultima.getKilometraje())
+              if (d.getKilometraje() < ultima.getKilometraje())
                 throw new ApiException(
                     409, "El último kilometraje registrado es " + ultima.getKilometraje());
             });
     OrdenServicio o = new OrdenServicio();
     o.setVehiculo(v);
-    o.setKilometraje(d.kilometraje());
+    o.setKilometraje(d.getKilometraje());
     o.setFecha(LocalDateTime.now(clock));
     o.setEstado(EstadoOrden.REGISTRADA);
     o.setUsuarioRegistro(username);
@@ -65,19 +65,19 @@ public class OrdenServiceImpl implements OrdenService {
     long numero = ordenes.siguienteNumero();
     if (numero > 999999) throw new ApiException(409, "Se agotó la numeración OS de seis dígitos");
     o.setNumero(String.format("OS-%06d", numero));
-    for (DetalleRequestDTO item : d.detalles()) {
+    for (DetalleRequestDTO item : d.getDetalles()) {
       Servicio s =
           servicios
-              .findById(item.servicioId())
+              .findById(item.getServicioId())
               .orElseThrow(() -> ApiException.noExiste("Servicio"));
       if (!Boolean.TRUE.equals(s.getActivo()))
         throw new ApiException(409, "El servicio " + s.getCodigo() + " está inactivo");
       DetalleOrden det = new DetalleOrden();
       det.setOrden(o);
       det.setServicio(s);
-      det.setCantidad(item.cantidad());
+      det.setCantidad(item.getCantidad());
       det.setPrecioUnitario(s.getPrecio());
-      det.setSubtotal(s.getPrecio().multiply(BigDecimal.valueOf(item.cantidad())));
+      det.setSubtotal(s.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())));
       o.getDetalles().add(det);
       o.setTotal(o.getTotal().add(det.getSubtotal()));
     }
@@ -88,7 +88,7 @@ public class OrdenServiceImpl implements OrdenService {
 
   @Transactional
   public OrdenResponseDTO anular(Long id, AnularRequestDTO d) {
-    if (d.motivo() == null || d.motivo().trim().length() < 10 || d.motivo().length() > 200)
+    if (d.getMotivo() == null || d.getMotivo().trim().length() < 10 || d.getMotivo().length() > 200)
       throw new ApiException(400, "El motivo debe tener entre 10 y 200 caracteres");
     OrdenServicio o = ordenes.bloquear(id).orElseThrow(() -> ApiException.noExiste("Orden"));
     if (o.getEstado() != EstadoOrden.REGISTRADA)
@@ -96,7 +96,7 @@ public class OrdenServiceImpl implements OrdenService {
     if (!o.getFecha().toLocalDate().equals(LocalDate.now(clock)))
       throw new ApiException(409, "Solo se puede anular el mismo día del registro");
     o.setEstado(EstadoOrden.ANULADA);
-    o.setMotivoAnulacion(d.motivo().trim());
+    o.setMotivoAnulacion(d.getMotivo().trim());
     log.info("Orden anulada numero={}", o.getNumero());
     return AutoAndesMapper.orden(o);
   }
