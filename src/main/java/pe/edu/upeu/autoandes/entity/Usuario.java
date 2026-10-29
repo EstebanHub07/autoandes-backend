@@ -1,9 +1,15 @@
 package pe.edu.upeu.autoandes.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,51 +35,4 @@ public class Usuario {
       inverseJoinColumns = @JoinColumn(name = "rol_id"))
   private java.util.Set<Rol> roles = new java.util.HashSet<>();
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long value) {
-    this.id = value;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String value) {
-    this.username = value;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String value) {
-    this.password = value;
-  }
-
-  public String getNombrecompleto() {
-    return nombrecompleto;
-  }
-
-  public void setNombrecompleto(String value) {
-    this.nombrecompleto = value;
-  }
-
-  public Boolean getActivo() {
-    return activo;
-  }
-
-  public void setActivo(Boolean value) {
-    this.activo = value;
-  }
-
-  public java.util.Set<Rol> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(java.util.Set<Rol> value) {
-    this.roles = value;
-  }
 }

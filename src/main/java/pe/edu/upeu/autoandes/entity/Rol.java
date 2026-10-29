@@ -1,9 +1,15 @@
 package pe.edu.upeu.autoandes.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "roles")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rol {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,20 +17,4 @@ public class Rol {
 
   @Column(nullable = false, unique = true, length = 30)
   private String nombre;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long value) {
-    this.id = value;
-  }
-
-  public String getNombre() {
-    return nombre;
-  }
-
-  public void setNombre(String value) {
-    this.nombre = value;
-  }
 }

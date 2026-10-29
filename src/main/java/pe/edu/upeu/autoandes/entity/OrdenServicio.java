@@ -1,9 +1,15 @@
 package pe.edu.upeu.autoandes.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "orden_servicio")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrdenServicio {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,84 +43,4 @@ public class OrdenServicio {
 
   @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
   private java.util.List<DetalleOrden> detalles = new java.util.ArrayList<>();
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long value) {
-    this.id = value;
-  }
-
-  public String getNumero() {
-    return numero;
-  }
-
-  public void setNumero(String value) {
-    this.numero = value;
-  }
-
-  public java.time.LocalDateTime getFecha() {
-    return fecha;
-  }
-
-  public void setFecha(java.time.LocalDateTime value) {
-    this.fecha = value;
-  }
-
-  public Vehiculo getVehiculo() {
-    return vehiculo;
-  }
-
-  public void setVehiculo(Vehiculo value) {
-    this.vehiculo = value;
-  }
-
-  public Integer getKilometraje() {
-    return kilometraje;
-  }
-
-  public void setKilometraje(Integer value) {
-    this.kilometraje = value;
-  }
-
-  public EstadoOrden getEstado() {
-    return estado;
-  }
-
-  public void setEstado(EstadoOrden value) {
-    this.estado = value;
-  }
-
-  public java.math.BigDecimal getTotal() {
-    return total;
-  }
-
-  public void setTotal(java.math.BigDecimal value) {
-    this.total = value;
-  }
-
-  public String getUsuarioRegistro() {
-    return usuarioRegistro;
-  }
-
-  public void setUsuarioRegistro(String value) {
-    this.usuarioRegistro = value;
-  }
-
-  public String getMotivoAnulacion() {
-    return motivoAnulacion;
-  }
-
-  public void setMotivoAnulacion(String value) {
-    this.motivoAnulacion = value;
-  }
-
-  public java.util.List<DetalleOrden> getDetalles() {
-    return detalles;
-  }
-
-  public void setDetalles(java.util.List<DetalleOrden> value) {
-    this.detalles = value;
-  }
 }

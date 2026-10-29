@@ -1,9 +1,15 @@
 package pe.edu.upeu.autoandes.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "vehiculo")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vehiculo {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,52 +30,4 @@ public class Vehiculo {
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "cliente_id")
   private Cliente cliente;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long value) {
-    this.id = value;
-  }
-
-  public String getPlaca() {
-    return placa;
-  }
-
-  public void setPlaca(String value) {
-    this.placa = value;
-  }
-
-  public String getMarca() {
-    return marca;
-  }
-
-  public void setMarca(String value) {
-    this.marca = value;
-  }
-
-  public String getModelo() {
-    return modelo;
-  }
-
-  public void setModelo(String value) {
-    this.modelo = value;
-  }
-
-  public Integer getAnio() {
-    return anio;
-  }
-
-  public void setAnio(Integer value) {
-    this.anio = value;
-  }
-
-  public Cliente getCliente() {
-    return cliente;
-  }
-
-  public void setCliente(Cliente value) {
-    this.cliente = value;
-  }
 }
